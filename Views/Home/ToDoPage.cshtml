@@ -1,0 +1,125 @@
+﻿@model List<ToDo>
+@using TODOList.Controllers
+@{
+    int count = 0;
+}
+
+<link rel="stylesheet" href="/css/site.css"/>
+<form asp-controller="Home" asp-action="ToDoPage" method="post">
+    <h2>Create new ToDo</h2>
+    <label for="UserName">Username:</label>
+    <input class="textbox_input" asp-for="FirstOrDefault().Username" id="UserName" placeholder="Type username...">
+    <input class="btn_input" type="submit" name="action" value="Synchronize">
+    <br />
+    <br />
+    <label for="AddNewItem">Topic:</label>
+    <input class="textbox_input textbox_input_margin" name="ToDoTopic" id="AddNewItem" placeholder="Type topic...">
+    <input class="btn_input" type="submit" name="action" value="Add">
+    <br />
+    <hr />
+</form>
+
+<h2>ToDo's:</h2>
+<table>
+    <tr>
+        <td class="checkbox_style"">IsDone</td>
+        <td>Username</td>
+        <td>Topic</td>
+        <td>Date of creation</td>
+        <td>Date of modification</td>
+        <td>Date of done</td>
+        <td>Archivate</td>
+        <td>Delete</td>
+    </tr>
+    @if (Model.Count != 0)
+    {
+        @foreach (var item in Model)
+        {
+            @if (!item.isArchived)
+            {
+                <tr>
+                    <td class="checkbox_style"><input class="input_center" type="checkbox" checked="@item.isDone" onclick="window.location.href = '/Home/Done/@item.Id'"></td>
+                    <td>@item.Username</td>
+                    <td>@item.Topic</td>
+                    <td>@item.DateOfCreation.ToString()</td>
+                    @if (item.isModify == true)
+                    {
+                        <td>@item.DateOfModification.ToString();</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (item.isDone == true)
+                    {
+                        <td>@item.DateOfDone.ToString();</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td>
+                        <input class="btn_input input_center" type="button" onclick="window.location.href = '/Home/Archivate/@item.Id'" value="Archivate">
+                    </td>
+                    <td>
+                        <input class="btn_input input_center" type="button" onclick="window.location.href = '/Home/Delete/@item.Id'" value="Delete" />
+                    </td>
+                </tr>
+            }
+        }
+    }
+    else
+    {
+        <tr>
+            <td>ToDo's Not Found.</td>
+            <td>Maybe your username is wrong or.</td>
+            <td>You don't have ToDo's.</td>
+        </tr>
+    }
+</table>
+<hr>
+
+<h2>Archive</h2>
+<table>
+    <tr>
+        <td class="checkbox_style">IsDone</td>
+        <td>Username</td>
+        <td>Topic</td>
+        <td>Date of creation</td>
+        <td>Date of modification</td>
+        <td>Date of done</td>
+        <td>Delete</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        @if (item.isArchived)
+        {
+            <tr>
+                <td class="checkbox_style"><input class="input_center" type="checkbox" checked="@item.isDone" disabled></td>
+                <td>@item.Username</td>
+                <td>@item.Topic</td>
+                <td>@item.DateOfCreation.ToString()</td>
+                @if (item.isModify == true)
+                {
+                    <td>@item.DateOfModification.ToString();</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (item.isDone == true)
+                {
+                    <td>@item.DateOfDone.ToString();</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>
+                    <input class="btn_input input_center" type="button" onclick="window.location.href = '/Home/Delete/@item.Id'" value="Delete" />
+                </td>
+
+            </tr>
+        }
+    }
+</table>
